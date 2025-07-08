@@ -36,3 +36,61 @@
     transform: rotate(360deg);
   }
 }
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 64px; /* Height of the header */
+  padding-bottom: 20px;
+}
+
+.navbar.fixed-top {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+main {
+  min-height: calc(100vh - 76px);
+}
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.status-badge.pending {
+  background-color: #f0ad4e;
+  color: white;
+}
+
+.status-badge.in\ progress {
+  background-color: #5bc0de;
+  color: white;
+}
+
+.status-badge.resolved {
+  background-color: #5cb85c;
+  color: white;
+}
+
+.btn-in-progress {
+  background-color: #f0ad4e;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-resolve {
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
