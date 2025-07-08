@@ -18,3 +18,10 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+const mongoose = require('mongoose');
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB Connected!'))
+  .catch(err => console.log('DB Error:', err));
