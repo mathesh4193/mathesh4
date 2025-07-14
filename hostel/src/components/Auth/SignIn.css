@@ -12,6 +12,24 @@
   margin-bottom: 20px;
   color: #4dabf5;
 }
+.signin-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.role-selector .btn-group .btn {
+  flex: 1;
+}
+
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.password-strength {
+  font-size: 0.875rem;
+}
 .password-input-container {
   position: relative;
   display: flex;

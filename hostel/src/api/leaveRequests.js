@@ -1,4 +1,3 @@
-// Example API endpoint handler
 export const updateLeaveRequest = async (requestId, status) => {
   try {
     const response = await fetch('/api/leave-requests/update', {

@@ -10,7 +10,6 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import './Home.css';
-// Remove the unused BootstrapButton import
 import Footer from '../Layout/Footer';
 
 const Home = () => {
@@ -18,7 +17,6 @@ const Home = () => {
   const featuresRef = useRef(null);
   const heroRef = useRef(null);
 
-  // Remove unused scrollToSection function
 
   const handleFeatureClick = (feature) => {
     const isLoggedIn = localStorage.getItem('token');
@@ -31,7 +29,6 @@ const Home = () => {
       return;
     }
 
-    // Redirect based on user role for dashboard
     if (feature === 'dashboard') {
       if (userRole === 'warden') {
         navigate('/warden/dashboard');
@@ -40,7 +37,6 @@ const Home = () => {
         navigate('/admin/dashboard');
         return;
       }
-      // Default to student dashboard if role is student or not specified
     }
 
     if (!isLoggedIn && !publicFeatures.includes(feature)) {
@@ -55,7 +51,7 @@ const Home = () => {
       mess: '/student/dashboard/mess',
       room: '/student/dashboard/room',
       security: '/student/dashboard/security',
-      dashboard: '/student/dashboard', // Default student dashboard path
+      dashboard: '/student/dashboard', 
       outpass: '/student/dashboard/outpass',
       attendance: 'student/dashboard/attendance'
     };
@@ -68,7 +64,6 @@ const Home = () => {
   return (
     <>
       <Container className="home-container">
-        {/* Hero section */}
         <Box className="hero-section" ref={heroRef}>
           <Typography variant="h2">
             VCET Hostel 
@@ -86,7 +81,6 @@ const Home = () => {
           </Button>
         </Box>
 
-        {/* Features section */}
         <Box className="features-section" ref={featuresRef}>
           <Typography variant="h3">Features</Typography>
           <div className="features-grid">

@@ -1,6 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Import Layout and Components
@@ -9,7 +11,6 @@ import Home from './components/Home/Home';
 import SignIn from './components/Auth/SignIn';
 import StudentDashboard from './components/Dashboard/StudentDashboard';
 import WardenDashboard from './components/Dashboard/WardenDashboard';
-import AdminDashboard from './components/Dashboard/AdminDashboard';
 import About from './components/About/About';
 import Leave from './components/Leave/Leave';
 import Complaints from './components/Complaints/Complaints';
@@ -40,7 +41,6 @@ function App() {
 
           {/* Warden Dashboard */}
           <Route path="/warden/dashboard" element={<PrivateRoute><WardenDashboard /></PrivateRoute>} />
-          <Route path="/admin/dashboard" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
 
           {/* Warden Management Routes */}
           <Route path="/warden/students" element={<PrivateRoute><Students /></PrivateRoute>} />

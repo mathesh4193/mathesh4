@@ -20,7 +20,7 @@ const Auth = () => {
     setError('');
     
     try {
-      if (tab === 0) { // Login
+      if (tab === 0) { 
         const response = await authService.login({
           email: formData.email,
           password: formData.password,

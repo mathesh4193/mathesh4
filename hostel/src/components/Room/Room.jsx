@@ -5,7 +5,6 @@ const Room = () => {
   return (
     <Container>
       <Typography variant="h4">Room Allocation</Typography>
-      {/* Add your room allocation content here */}
     </Container>
   );
 };

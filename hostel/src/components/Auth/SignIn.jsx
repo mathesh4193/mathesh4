@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Container, Form, Button, Alert, Card, Row, Col } from 'react-bootstrap';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Container, Form, Button, Alert, Card, Row, Col, Spinner } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './SignIn.css';
 
 const SignIn = () => {
@@ -9,15 +10,18 @@ const SignIn = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const handleSuccessfulLogin = (role) => {
-    const from = location.state?.from || '/';
-    if (from !== '/' && from.startsWith(`/${role}`)) {
-      navigate(from);
-    } else {
-      navigate(`/${role}/dashboard`);
+  const handleSuccessfulLogin = (userData) => {
+    localStorage.setItem('token', userData.token);
+    localStorage.setItem('user', JSON.stringify(userData.user));
+    
+    if (userData.user.role === 'student') {
+      navigate('/student/dashboard');
+    } else if (userData.user.role === 'warden') {
+      navigate('/warden/dashboard');
     }
   };
 
@@ -28,130 +32,173 @@ const SignIn = () => {
     setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+    checkPasswordStrength(value);
+  };
+
+  const checkPasswordStrength = (value) => {
+    const strongPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+    setPasswordStrength(strongPattern.test(value) ? 'Strong' : 'Weak');
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
-    // Validation for empty fields
     if (!userId || !password) {
       setError('Please enter all fields');
+      setLoading(false);
       return;
     }
 
-    // Student Validation: Roll Number (Alphanumeric) & Password (12-digit number)
-    if (activeRole === 'student') {
-      const studentRollPattern = /^[A-Za-z0-9]+$/; // Alphanumeric check
-      const studentPassPattern = /^\d{12}$/; // 12-digit number check
-
-      if (!studentRollPattern.test(userId)) {
-        setError('Invalid Student Roll Number. Use only letters and numbers.');
-        return;
-      }
-      if (!studentPassPattern.test(password)) {
-        setError('Invalid Student Password. Must be exactly 12 digits.');
-        return;
-      }
-    }
-
-    // Warden Validation: Warden ID (Alphanumeric) & Password (Alphanumeric + Special Characters)
     if (activeRole === 'warden') {
-      const wardenIdPattern = /^[A-Za-z0-9]+$/; // Alphanumeric check
-      const wardenPassPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/; // Letters, numbers, and special characters
-
+      const wardenIdPattern = /^[A-Za-z0-9]+$/;
       if (!wardenIdPattern.test(userId)) {
         setError('Invalid Warden ID. Use only letters and numbers.');
-        return;
-      }
-      if (!wardenPassPattern.test(password)) {
-        setError('Invalid Warden Password. Must include letters, numbers, and special characters.');
+        setLoading(false);
         return;
       }
     }
 
-    // Store login session
-    localStorage.setItem('token', `${activeRole}-token`);
-    localStorage.setItem('role', activeRole);
-    localStorage.setItem('userName', `${activeRole} ${userId}`);
-    handleSuccessfulLogin(activeRole);
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        userId,
+        password,
+        role: activeRole
+      });
+
+      if (response.data.success) {
+        handleSuccessfulLogin(response.data);
+      } else {
+        throw new Error(response.data.message || 'Login failed');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError(err.response?.data?.message || err.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Container className="py-5">
-      <Row className="justify-content-center">
-        <Col md={6} lg={5}>
-          <Card className="shadow-sm">
-            <Card.Body className="p-4">
-              <h2 className="text-center mb-4">Sign In</h2>
+    <Container className="signin-container d-flex align-items-center justify-content-center min-vh-100 py-4">
+      <Row className="justify-content-center w-100">
+        <Col md={8} lg={6} xl={5}>
+          <Card className="shadow-lg border-0">
+            <Card.Body className="p-4 p-md-5">
+              <div className="text-center mb-4">
+                <h2 className="fw-bold mb-3">Hostel Management System</h2>
+                <p className="text-muted mb-0">Sign in to access your account</p>
+              </div>
 
-              {error && <Alert variant="danger">{error}</Alert>}
+              {error && (
+                <Alert 
+                  variant="danger" 
+                  className="text-center mb-4"
+                  onClose={() => setError('')}
+                  dismissible
+                >
+                  {error}
+                </Alert>
+              )}
 
-              <div className="mb-4">
-                <p className="text-center mb-3">Please select your role and enter your credentials</p>
-
-                <div className="role-selector d-flex mb-4">
-                  <Button 
-                    variant={activeRole === 'student' ? 'primary' : 'outline-primary'} 
-                    className="flex-grow-1 me-2"
+              <div className="role-selector mb-4">
+                <div className="btn-group w-100 shadow-sm">
+                  <Button
+                    variant={activeRole === 'student' ? 'primary' : 'outline-primary'}
                     onClick={() => handleRoleChange('student')}
+                    className={`py-2 ${activeRole === 'student' ? 'active-role' : ''}`}
                   >
-                    <div className="text-center">
-                      <div>Student</div>
-                      <small>Enter Roll Number & Password</small>
-                    </div>
+                    <i className="bi bi-person-fill me-2"></i>
+                    Student
                   </Button>
-                  
-                  <Button 
-                    variant={activeRole === 'warden' ? 'primary' : 'outline-primary'} 
-                    className="flex-grow-1"
+                  <Button
+                    variant={activeRole === 'warden' ? 'primary' : 'outline-primary'}
                     onClick={() => handleRoleChange('warden')}
+                    className={`py-2 ${activeRole === 'warden' ? 'active-role' : ''}`}
                   >
-                    <div className="text-center">
-                      <div>Warden</div>
-                      <small>Enter Warden ID & Password</small>
-                    </div>
+                    <i className="bi bi-shield-lock-fill me-2"></i>
+                    Warden
                   </Button>
                 </div>
               </div>
 
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
-                  <Form.Label>
+                  <Form.Label className="fw-medium">
                     {activeRole === 'student' ? 'Roll Number' : 'Warden ID'}
                   </Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder={`Enter ${activeRole === 'student' ? 'Roll Number' : 'Warden ID'}`}
+                    placeholder={`Enter your ${activeRole === 'student' ? 'roll number' : 'warden ID'}`}
                     value={userId}
                     onChange={(e) => setUserId(e.target.value)}
+                    required
+                    className="py-2"
                   />
+                  <Form.Text className="text-muted">
+                    {activeRole === 'student' 
+                      ? 'Enter your university roll number' 
+                      : 'Enter your provided warden ID'}
+                  </Form.Text>
                 </Form.Group>
 
-                <Form.Group className="mb-4">
-                  <Form.Label>Password</Form.Label>
-                  <div className="position-relative">
+                <Form.Group className="mb-3">
+                  <Form.Label className="fw-medium">Password</Form.Label>
+                  <div className="input-group mb-1">
                     <Form.Control
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={handlePasswordChange}
+                      required
+                      className="py-2 border-end-0"
                     />
-                    <Button 
-                      variant="link" 
-                      className="position-absolute end-0 top-0 text-decoration-none"
+                    <Button
+                      variant="outline-secondary"
                       onClick={() => setShowPassword(!showPassword)}
-                      style={{ padding: '0.375rem 0.75rem' }}
+                      className="border-start-0"
                     >
-                      {showPassword ? 'Hide' : 'Show'}
+                      <i className={`bi bi-eye${showPassword ? '-slash' : ''}-fill`}></i>
                     </Button>
                   </div>
+                  {password && (
+                    <div className={`small ${passwordStrength === 'Strong' ? 'text-success' : 'text-warning'}`}>
+                      <i className={`bi ${passwordStrength === 'Strong' ? 'bi-check-circle-fill' : 'bi-exclamation-circle-fill'} me-1`}></i>
+                      Password strength: {passwordStrength}
+                    </div>
+                  )}
                 </Form.Group>
 
-                <Button variant="primary" type="submit" className="w-100 py-2 mb-3">
-                  Sign In
-                </Button>
+                <div className="d-grid mb-3">
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    size="lg"
+                    disabled={loading}
+                    className="py-2 fw-medium"
+                  >
+                    {loading ? (
+                      <>
+                        <Spinner as="span" animation="border" size="sm" role="status" className="me-2" />
+                        Signing in...
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-box-arrow-in-right me-2"></i>
+                        Sign In
+                      </>
+                    )}
+                  </Button>
+                </div>
 
-                <div className="text-center">
-                  <a href="#forgot-password" className="text-decoration-none">Forgot Password?</a>
+                <div className="text-center pt-2">
+                  <a href="/forgot-password" className="text-decoration-none small">
+                    Forgot password?
+                  </a>
                 </div>
               </Form>
             </Card.Body>

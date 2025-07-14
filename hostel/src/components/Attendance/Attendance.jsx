@@ -4,15 +4,14 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// VCET Campus Coordinates
 const VCET_COORDS = {
   latitude: 9.8945572,
   longitude: 78.1776890,
-  radius: 200  // Campus radius in meters
+  radius: 200 
 };
 
 const getDistance = (lat1, lon1, lat2, lon2) => {
-  const R = 6371e3; // Earth radius in meters
+  const R = 6371e3; 
   const toRadians = (deg) => (deg * Math.PI) / 180;
   const dLat = toRadians(lat2 - lat1);
   const dLon = toRadians(lon2 - lon1);
@@ -66,7 +65,6 @@ const Attendance = () => {
     fetchAttendanceData();
   }, [month]);
 
-  // Get current location on component mount
   useEffect(() => {
     if (!navigator.geolocation) {
       setError("Geolocation is not supported by this browser.");
@@ -96,7 +94,6 @@ const Attendance = () => {
           setError("");
         }
 
-        // Fetch address using OpenStreetMap Nominatim API
         const addressResponse = await fetch(
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
         );
@@ -142,15 +139,12 @@ const Attendance = () => {
         month: new Date().toISOString().slice(0, 7)
       };
 
-      // Send attendance to backend
       const response = await axios.post(API_URL, attendancePayload);
       
-      // Update local state with new attendance record
       const updatedAttendance = [response.data, ...attendanceData];
       setAttendanceData(updatedAttendance);
       calculateStats(updatedAttendance);
 
-      // Show success feedback
       setAttendanceStatus(isInCampus ? 'PRESENT' : 'ABSENT');
       setAttendanceMessage(
         isInCampus
@@ -176,7 +170,7 @@ const Attendance = () => {
     <Container className="py-4">
       <h2 className="text-center mb-4">Attendance System</h2>
 
-      {/* Current Status Card */}
+      {}
       <Card className="mb-4 shadow-sm">
         <Card.Header className="bg-primary text-white py-3">
           <h5 className="mb-0">Current Status</h5>
@@ -225,7 +219,7 @@ const Attendance = () => {
         </Card.Body>
       </Card>
 
-      {/* Attendance Statistics */}
+      
       <Row className="mb-4 g-3">
         <Col md={4}>
           <Card className="h-100 text-center border-primary">
@@ -253,7 +247,7 @@ const Attendance = () => {
         </Col>
       </Row>
 
-      {/* Attendance History */}
+      
       <Card className="shadow-sm">
         <Card.Header className="bg-light d-flex justify-content-between align-items-center">
           <h5 className="mb-0">Attendance History</h5>
@@ -306,7 +300,6 @@ const Attendance = () => {
         </Card.Body>
       </Card>
 
-      {/* Attendance Confirmation Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header 
           closeButton 

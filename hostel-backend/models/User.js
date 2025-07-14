@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ["student", "warden"], default: "student" },
 });
 
-// Hash the password before saving the user
 userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
     const salt = await bcrypt.genSalt(10);
@@ -16,7 +15,6 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// Method to compare entered password with stored hash
 userSchema.methods.isValidPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };

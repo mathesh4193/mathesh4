@@ -32,17 +32,14 @@ const OutpassForm = () => {
       return;
     }
 
-    // Here you would typically send the data to your backend
     console.log('Outpass request submitted:', formData);
     
-    // Show success message
     setSubmitStatus({
       show: true,
       message: 'Outpass request submitted successfully!',
       variant: 'success'
     });
 
-    // Reset form
     setFormData({
       destination: '',
       purpose: '',
@@ -54,7 +51,6 @@ const OutpassForm = () => {
     });
     setValidated(false);
 
-    // Hide success message after 3 seconds
     setTimeout(() => {
       setSubmitStatus({ show: false, message: '', variant: '' });
     }, 3000);

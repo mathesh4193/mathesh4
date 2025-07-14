@@ -53,11 +53,10 @@ const WardenDashboard = () => {
     contact: '',
     parentContact: '',
     address: '',
-    block: 'A' // Default block
+    block: 'A' 
   });
 
   useEffect(() => {
-    // Authentication check
     const wardenAuth = localStorage.getItem('role') === 'warden' && localStorage.getItem('token');
     if (!wardenAuth) {
       navigate('/');
@@ -137,7 +136,7 @@ const WardenDashboard = () => {
       setStudents([response.data, ...students]);
       toast.success('Student added successfully');
       handleCloseDialog();
-      fetchDashboardStats(); // Refresh stats
+      fetchDashboardStats(); 
     } catch (error) {
       console.error('Error adding student:', error);
       toast.error('Failed to add student');
@@ -236,7 +235,6 @@ const WardenDashboard = () => {
         Welcome back, {wardenName}!
       </Typography>
       
-      {/* Stats Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={12} md={6} lg={3}>
           <StatCard 
@@ -268,7 +266,6 @@ const WardenDashboard = () => {
         </Grid>
       </Grid>
 
-      {/* Quick Access Cards */}
       <Typography variant="h5" sx={{ mb: 3, color: '#2c387e', textAlign: 'center' }}>
         Quick Actions
       </Typography>
@@ -295,7 +292,6 @@ const WardenDashboard = () => {
         />
       </Grid>
 
-      {/* Student Management Section */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant="h5" sx={{ color: '#2c387e' }}>
           Student Directory
@@ -355,7 +351,6 @@ const WardenDashboard = () => {
         </Table>
       </TableContainer>
 
-      {/* Add Student Dialog */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Add New Student</DialogTitle>
         <DialogContent>

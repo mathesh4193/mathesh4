@@ -22,7 +22,6 @@ const Complaints = () => {
   const [validated, setValidated] = useState(false);
   const [submitStatus, setSubmitStatus] = useState({ show: false, message: '', variant: '' });
 
-  // Initially mocked complaint history
   const [complaints, setComplaints] = useState([
     {
       id: 1,

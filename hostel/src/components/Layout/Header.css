@@ -6,28 +6,27 @@
   z-index: 1000;
   background: linear-gradient(135deg, #1a2035 0%, #2a3446 100%) !important;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  min-height: 48px !important; /* Reduced height */
+  min-height: 48px !important;
 }
 
-/* Adjust main content margin */
 .main-content {
-  margin-top: 3px; /* Reduced margin */
-  min-height: calc(100vh - 48px); /* Adjusted for new header height */
+  margin-top: 3px;
+  min-height: calc(100vh - 48px);
 }
 
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 4px; /* Reduced gap */
+  gap: 4px;
 }
 
 .logo {
-  height: 30px; /* Smaller logo */
+  height: 30px;
   width: auto;
 }
 
 .title {
-  font-size: 0.9rem !important; /* Smaller font */
+  font-size: 0.9rem !important;
   margin: 0 !important;
 }
 
@@ -80,7 +79,6 @@
   color: #4dabf5 !important;
 }
 
-/* Remove the margin-top since header is not fixed anymore */
 main {
   padding-top: 20px;
 }
@@ -90,5 +88,5 @@ html {
 }
 
 .features-section {
-  scroll-margin-top: 64px; /* Adjust based on your header height */
+  scroll-margin-top: 64px;
 }

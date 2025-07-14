@@ -17,7 +17,7 @@
 
 .form-field .MuiInputLabel-root,
 .form-field .MuiInputBase-input {
-  color: #b0bec5 !important; /* Changed from white to a subtle dark grayish-blue */
+  color: #b0bec5 !important; 
   font-size: 1rem;
 }
 
@@ -58,9 +58,8 @@
   width: 100%;
 }
 
-/* Updated text color */
 .complaints-title {
-  color: #90a4ae; /* Soft desaturated blue-gray for a unique dark feel */
+  color: #90a4ae; 
   margin-bottom: 2rem;
   text-align: center;
 }

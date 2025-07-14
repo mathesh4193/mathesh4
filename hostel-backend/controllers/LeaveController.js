@@ -1,4 +1,3 @@
-// LeaveController.js
 const LeaveRequest = require('../models/LeaveRequest');
 
 // Get all leave requests (for warden)
